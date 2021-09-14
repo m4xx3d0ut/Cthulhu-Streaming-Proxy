@@ -1,21 +1,39 @@
 #!/usr/bin/env python3
 
 """
-Downloads the most recent mainline version of Nginx from nginx.org and
-saves it locally.
+Downloads the most recent mainline version of Nginx from nginx.org and RTMP
+module from https://github.com/sergey-dryabzhinsky/nginx-rtmp-module, saves it
+locally, and builds it.
 
 https://twitter.com/m4xx3d0ut
 https://github.com/m4xx3d0ut
 """
 
-import requests 
+import requests
+import shlex
+import subprocess
+from time import sleep
+from os import path, mkdir, getcwd, chdir
+from shutil import rmtree
+from buildDeps import cmd_out
 
-nginxDowloadUrl = 'http://nginx.org/en/download.html'
+# Download page URL for Nginx latest, function will parse latest version
+nginx_dl_latest = 'http://nginx.org/en/download.html'
+# Direct URL of Nginx RTMP module
+nginx_rtmp = \
+'https://github.com/sergey-dryabzhinsky/nginx-rtmp-module/archive/dev.zip'
+# Initialize file name variables
+nginx_latest_local = ''
+rtmp_local = ''
+tmp_path = ''
 
-def nginxMainlineLatest():
 
-    print('[*] Dowloading latest Nginx mainline from %s' % (nginxDowloadUrl))
-    r = requests.get(nginxDowloadUrl) 
+# Dowloads the latest Nginx mainline
+def nginx_mainline_latest():
+    global nginx_latest_local
+
+    print('[*] Dowloading latest Nginx mainline from %s' % (nginx_dl_latest))
+    r = requests.get(nginx_dl_latest) 
     status_code = str(r.status_code)
     if str(r.status_code) == '200':
         print('[*] Pass. Server status code: %s' % (status_code))
@@ -23,17 +41,101 @@ def nginxMainlineLatest():
         print('[!] Error. Server status code: %s' % (status_code))
         print('[!] Unable to download. Exiting...')
         exit(0)
-    txt_split = r.text.split('"/download/nginx-')[1] 
-    ver = txt_split.split('.tar.gz')[0] 
-    local_file = 'nginx-%s.tar.gz' % (ver) 
-    remote_url = 'http://nginx.org/download/%s' % (local_file) 
-    print('[*] Downloading %s from %s' % (local_file, remote_url))
-    data = requests.get(remote_url) 
-    print('[+] Writing to local file: %s' % (local_file))
-    with open(local_file, 'wb') as file: 
-        file.write(data.content) 
+    txt_split = r.text.split('"/download/nginx-')[1]
+    ver = txt_split.split('.tar.gz')[0]
+    nginx_latest_local = 'nginx-%s.tar.gz' % (ver)
+    remote_url = 'http://nginx.org/download/%s' % (nginx_latest_local)
+    print('[*] Downloading %s from %s' % (nginx_latest_local, remote_url))
+    data = requests.get(remote_url)
+    print('[+] Writing to local file: %s' % (nginx_latest_local))
+    with open(nginx_latest_local, 'wb') as file: 
+        file.write(data.content)
     print('[!] Dowload complete.')
+
+# Downloads the Nginx RTMP module
+def nginx_rtmp_mod():
+    global rtmp_local
+
+    rtmp_local = nginx_rtmp.split('/')[-1]
+
+    print('[*] Downloading Nginx RTMP module from: %s' % (nginx_rtmp))
+    data = requests.get(nginx_rtmp)
+    print('[+] Writing to local file: %s' % (rtmp_local))
+    with open(rtmp_local, 'wb') as file:
+        file.write(data.content)
+    print('[!] Download complete.')
+
+# Build Nginx with RTMP support
+def nginx_rtmp_build(nginx, rtmp):
+    global tmp_path
+
+    build_path = \
+    input('[*] Press enter to build in ./tmp or specify full path: ')
+
+    if build_path == '':
+        print('[*] Extract archives to ./tmp...')
+        if path.isdir('./tmp') == True:
+            yn = input('[!] WARNING: ./tmp exists, delete it? (y/n): ')
+            if yn == 'y':
+                print('[-] Deleting old ./tmp directory...')
+                rmtree('./tmp')
+                print('[+] Creating new ./tmp directory.')
+                mkdir('./tmp')
+                tmp_path = '%s/tmp' % (getcwd())
+            elif yn == 'n':
+                print('[!] Please rename or move ./tmp and rerun installer. \
+Exiting...')
+                exit(0)
+            else:
+                print('[!] Response invalid, exiting...')
+                exit(0)
+        else:
+            print('[+] Creating new ./tmp directory.')
+            mkdir('./tmp')
+            tmp_path = '%s/tmp' % (getcwd())
+
+    else:
+        if path.isdir(build_path) == True:
+            print('[*] Specified path is valid.')
+            if build_path[-1] == '/':
+                tmp_path = '%stmp' % (build_path)
+            else:
+                tmp_path = '%s/tmp' % (build_path)
+            if path.isdir(tmp_path) == False:
+                print('[+] Creating tmp build dir: %s' % (tmp_path))
+                mkdir(tmp_path)
+
+    sleep(2)
+    print('[+] Extracting archives to: %s' % (tmp_path))
+    untar = 'tar -xvf %s -C %s' % (nginx_latest_local, tmp_path)
+    unzip = 'unzip %s -d %s' % (rtmp_local, tmp_path)
+
+    print('[*] Inflating tar: %s' % (nginx))
+    sleep(1)
+
+    untar_nginx = subprocess.Popen(shlex.split(untar), stderr=subprocess.PIPE, \
+        stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
+    cmd_out(untar_nginx)
+
+    print('[*] Unzip RTMP module: %s' % (rtmp))
+    sleep(1)
+
+    unzip_rtmp = subprocess.Popen(shlex.split(unzip), stderr=subprocess.PIPE, \
+        stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
+    cmd_out(unzip_rtmp)
+
+    print('[*] Building Nginx with RTMP module...')
+    sleep(1)
+
+    chdir('%s/%s' % (tmp_path, nginx_latest_local[0:-7]))
+    # Now we build nginx with rtmp module
+    # ./configure --with-http_ssl_module --add-module=../nginx-rtmp-module-dev
+    # make
+    # sudo make install
+
 
 if __name__ == '__main__':
 
-    nginxMainlineLatest()
+    nginx_mainline_latest()
+    nginx_rtmp_mod()
+    nginx_rtmp_build(nginx_latest_local, rtmp_local)
