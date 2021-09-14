@@ -3,7 +3,7 @@
 """
 General purpose *nix package manager updater and installer.  Runs update command
 from upd_cmd var and install command from inst_cmd var.  Will prompt for sudo
-password if needed.  Requires user input before installing, comment out line 38
+password if needed.  Requires user input before installing, comment out line 37
 to bypass.
 
 https://twitter.com/m4xx3d0ut
