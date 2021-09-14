@@ -6,6 +6,9 @@ server from Linux.  Requires Ffmpeg to be installed.  Tested on Debian x86_64.
 Run without arguments for help.
 
 The encoder settings are passable, but will probably need some work.
+
+https://twitter.com/m4xx3d0ut
+https://github.com/m4xx3d0ut
 """
 
 from sys import argv

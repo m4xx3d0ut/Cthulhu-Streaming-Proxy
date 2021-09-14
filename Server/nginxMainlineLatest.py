@@ -3,6 +3,9 @@
 """
 Downloads the most recent mainline version of Nginx from nginx.org and
 saves it locally.
+
+https://twitter.com/m4xx3d0ut
+https://github.com/m4xx3d0ut
 """
 
 import requests 
