@@ -170,20 +170,20 @@ Exiting...')
 
     # Now we build nginx with rtmp module
     # ./configure --with-http_ssl_module --add-module=../nginx-rtmp-module-dev
-    configure_nginx = subprocess.Popen(shlex.split(configure), stderr=subprocess.PIPE, \
-        stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
+    configure_nginx = subprocess.Popen(shlex.split(configure), \
+        stderr=subprocess.PIPE, stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
     cmd_out(configure_nginx)
     # make
     make_nginx = subprocess.Popen(shlex.split(make), stderr=subprocess.PIPE, \
         stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
     cmd_out(make_nginx)
     # sudo make install, installs to /usr/local/nginx/sbin/
-    install_nginx = subprocess.Popen(shlex.split(make_install), stderr=subprocess.PIPE, \
-        stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
+    install_nginx = subprocess.Popen(shlex.split(make_install), \
+        stderr=subprocess.PIPE, stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
     cmd_out(install_nginx)
     # Link to /user/local/sbin
-    link_nginx = subprocess.Popen(shlex.split(nginx_ln), stderr=subprocess.PIPE, \
-        stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
+    link_nginx = subprocess.Popen(shlex.split(nginx_ln), \
+        stderr=subprocess.PIPE, stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
     cmd_out(link_nginx)
 
     # Clean up build files
@@ -196,8 +196,9 @@ Exiting...')
         build_files = [nginx_latest_local, rtmp_local]
         for f in build_files:
             rm_archives = 'sudo rm -f %s' % (f)
-            rem = subprocess.Popen(shlex.split(rm_archives), stderr=subprocess.PIPE, \
-                stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
+            rem = subprocess.Popen(shlex.split(rm_archives), \
+                stderr=subprocess.PIPE, stdout=subprocess.PIPE, \
+                stdin=subprocess.PIPE)
             cmd_out(rem)
         # Delete tmp dir
         rm_tmp = 'sudo rm -f -R %s' % (tmp_path)

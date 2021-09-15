@@ -38,3 +38,5 @@ cloud provider of choice.
 I'll update this section with usefull information as we go.  I'm currently doing some research and hashing
 out the cloud infrastructure needs.
 
+9/15/2021 - Completed initial testing on the Nginx source build installer.  On a Debian based system it will dowload the latest version of Nginx and RTMP module, build it from source, and do some cleanup.  Next I will be working on the code to configure Nginx as a RTMP proxy and start it as a service.
+
