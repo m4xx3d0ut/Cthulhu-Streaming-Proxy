@@ -36,6 +36,10 @@ make_install = 'sudo make install'
 nginx_path = '/usr/local/nginx'
 nginx_sbin = '/usr/local/sbin/nginx'
 nginx_ln = 'sudo ln -s /usr/local/nginx/sbin/nginx /usr/local/sbin/'
+# Nginx conf.d directory, not created by default
+conf_dir = '/usr/local/nginx/conf/conf.d/'
+make_confd = 'sudo mkdir %s' % (conf_dir)
+cp_confd = 'sudo cp rtmp.conf %s' % (conf_dir)
 # Uninstall Nginx
 nginx_uninst = 'sudo rm -f -R %s && rm -f %s' % (nginx_path, nginx_sbin)
 
@@ -186,11 +190,23 @@ Exiting...')
         stderr=subprocess.PIPE, stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
     cmd_out(link_nginx)
 
+    # Create /usr/local/nginx/conf/conf.d/ folder and add basic rtmp.conf
+    nginx_confd = subprocess.Popen(shlex.split(make_confd), \
+        stderr=subprocess.PIPE, stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
+    cmd_out(nginx_confd)
+
+    # Copy basic RTMP conf to /usr/local/nginx/conf/conf.d/
+    chdir(cwd) 
+    """<------- Should wget file from github instead of changing 
+    directory and copying local file"""
+    nginx_conf_cp = subprocess.Popen(shlex.split(cp_confd), \
+        stderr=subprocess.PIPE, stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
+    cmd_out(nginx_conf_cp)
+
     # Clean up build files
     print('[*] Source build complete and Nginx has been installed!')
     clean = input('[!] Delete %s, %s, %s? (y/n): ' % (nginx_latest_local, \
     rtmp_local, tmp_path))
-    chdir(cwd)
     if clean == 'y':
         # Delete downloaded archives
         build_files = [nginx_latest_local, rtmp_local]
