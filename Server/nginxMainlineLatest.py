@@ -15,7 +15,8 @@ import subprocess
 from time import sleep
 from os import path, mkdir, getcwd, chdir
 from shutil import rmtree
-from buildDeps import cmd_out
+# Local imports
+import sublogger
 
 # Download page URL for Nginx latest, function will parse latest version
 nginx_dl_latest = 'http://nginx.org/en/download.html'
@@ -43,6 +44,8 @@ cp_confd = 'sudo cp rtmp.conf %s' % (conf_dir)
 # Uninstall Nginx
 nginx_uninst = 'sudo rm -f -R %s && rm -f %s' % (nginx_path, nginx_sbin)
 
+# Setup logging
+log = sublogger.sublogger('nginx-build.log')
 
 # Check if another source install of Nginx exists
 def check_nginx_install():
@@ -52,21 +55,18 @@ def check_nginx_install():
         rm = input('[!] Would you like to delete the existing build? (y/n):')
         if rm == 'y':
             if path.isfile(nginx_sbin) == True:
-                f = subprocess.Popen(shlex.split(nginx_uninst), \
-                    stderr=subprocess.PIPE, stdout=subprocess.PIPE, \
-                    stdin=subprocess.PIPE)
-                cmd_out(f)
+                log.cmd_out(nginx_uninst)
             elif path.isfile(nginx_sbin) == False:
                 rm_nginx_dir = nginx_uninst.split('&&')[0]
-                f = subprocess.Popen(shlex.split(rm_nginx_dir), \
-                    stderr=subprocess.PIPE, stdout=subprocess.PIPE, \
-                    stdin=subprocess.PIPE)
-                cmd_out(f)
+                log.cmd_out(rm_nginx_dir)
             else:
                 print('[!] Response invalid, exiting...')
                 exit(0)
     else:
         print('[!] Check for existing Nginx build, none found.')
+
+    print('[*] If build fails check nginx-build.log')
+    sleep(3)
 
 
 # Dowloads the latest Nginx mainline
@@ -156,16 +156,12 @@ Exiting...')
     print('[*] Inflating tar: %s' % (nginx))
     sleep(1)
 
-    untar_nginx = subprocess.Popen(shlex.split(untar), stderr=subprocess.PIPE, \
-        stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
-    cmd_out(untar_nginx)
+    log.cmd_out(untar)
 
     print('[*] Unzip RTMP module: %s' % (rtmp))
     sleep(1)
 
-    unzip_rtmp = subprocess.Popen(shlex.split(unzip), stderr=subprocess.PIPE, \
-        stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
-    cmd_out(unzip_rtmp)
+    log.cmd_out(unzip)
 
     print('[*] Building Nginx with RTMP module...')
     sleep(1)
@@ -174,34 +170,22 @@ Exiting...')
 
     # Now we build nginx with rtmp module
     # ./configure --with-http_ssl_module --add-module=../nginx-rtmp-module-dev
-    configure_nginx = subprocess.Popen(shlex.split(configure), \
-        stderr=subprocess.PIPE, stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
-    cmd_out(configure_nginx)
+    log.cmd_out(configure)
     # make
-    make_nginx = subprocess.Popen(shlex.split(make), stderr=subprocess.PIPE, \
-        stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
-    cmd_out(make_nginx)
+    log.cmd_out(make)
     # sudo make install, installs to /usr/local/nginx/sbin/
-    install_nginx = subprocess.Popen(shlex.split(make_install), \
-        stderr=subprocess.PIPE, stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
-    cmd_out(install_nginx)
+    log.cmd_out(make_install)
     # Link to /user/local/sbin
-    link_nginx = subprocess.Popen(shlex.split(nginx_ln), \
-        stderr=subprocess.PIPE, stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
-    cmd_out(link_nginx)
+    log.cmd_out(nginx_ln)
 
     # Create /usr/local/nginx/conf/conf.d/ folder and add basic rtmp.conf
-    nginx_confd = subprocess.Popen(shlex.split(make_confd), \
-        stderr=subprocess.PIPE, stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
-    cmd_out(nginx_confd)
+    log.cmd_out(make_confd)
 
     # Copy basic RTMP conf to /usr/local/nginx/conf/conf.d/
     chdir(cwd) 
     """<------- Should wget file from github instead of changing 
     directory and copying local file"""
-    nginx_conf_cp = subprocess.Popen(shlex.split(cp_confd), \
-        stderr=subprocess.PIPE, stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
-    cmd_out(nginx_conf_cp)
+    log.cmd_out(cp_confd)
 
     # Clean up build files
     print('[*] Source build complete and Nginx has been installed!')
@@ -212,15 +196,10 @@ Exiting...')
         build_files = [nginx_latest_local, rtmp_local]
         for f in build_files:
             rm_archives = 'sudo rm -f %s' % (f)
-            rem = subprocess.Popen(shlex.split(rm_archives), \
-                stderr=subprocess.PIPE, stdout=subprocess.PIPE, \
-                stdin=subprocess.PIPE)
-            cmd_out(rem)
+            log.cmd_out(rm_archives)
         # Delete tmp dir
         rm_tmp = 'sudo rm -f -R %s' % (tmp_path)
-        rem = subprocess.Popen(shlex.split(rm_tmp), stderr=subprocess.PIPE, \
-            stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
-        cmd_out(rem)
+        log.cmd_out(rm_tmp)
         print('[*] Working files have been removed.')
     elif clean == 'n':
         print('[*] Working files preserved.')

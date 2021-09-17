@@ -1,2 +1,4 @@
 SRT-docs/
 Server/key-pairs/*
+__pycache__
+nginx-build.log
