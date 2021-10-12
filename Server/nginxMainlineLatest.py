@@ -41,6 +41,8 @@ nginx_ln = 'sudo ln -s /usr/local/nginx/sbin/nginx /usr/local/sbin/'
 conf_dir = '/usr/local/nginx/conf/conf.d/'
 make_confd = 'sudo mkdir %s' % (conf_dir)
 cp_confd = 'sudo cp rtmp.conf %s' % (conf_dir)
+conf_incl = 'include /usr/local/nginx/conf/conf.d/*.conf;'
+conf_sed = "sudo sed -i '1 i\\%s'" % (conf_incl)
 # Uninstall Nginx
 nginx_uninst = 'sudo rm -f -R %s && rm -f %s' % (nginx_path, nginx_sbin)
 
@@ -186,6 +188,7 @@ Exiting...')
     """<------- Should wget file from github instead of changing 
     directory and copying local file"""
     log.cmd_out(cp_confd)
+    log.cmd_out(conf_sed)
 
     # Clean up build files
     print('[*] Source build complete and Nginx has been installed!')
