@@ -16,7 +16,7 @@ import sys
 
 upd_cmd = 'sudo apt update'
 inst_cmd = 'sudo apt-get -y install build-essential libpcre3 libpcre3-dev \
-libssl-dev zip'
+libssl-dev zip zlib1g'
 
 
 # Prints stdout of subprocess Popen
