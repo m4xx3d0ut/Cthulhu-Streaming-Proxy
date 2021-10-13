@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title">
+  All Hail Cthulhu
+</h1>
+<p style="text-align:center;"><img src="{{ url_for('static', filename='images/cthulhu-inv.png')}}" alt="Cthulhu" width="35%" height="35%"></p>
+<h2 class="subtitle">
+  Video Streaming Proxy
+</h2>
+<p>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+</p>
+{% endblock %}

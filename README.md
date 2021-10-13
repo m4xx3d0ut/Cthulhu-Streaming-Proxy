@@ -1,6 +1,6 @@
 # Cthulhu Streaming Proxy
 
-![Cthulhu](cthulhu.png)
+![Cthulhu](app/static/images/cthulhu.png)
 
 ## About
 

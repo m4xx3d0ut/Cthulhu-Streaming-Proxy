@@ -3,3 +3,4 @@ Server/key-pairs/*
 __pycache__
 nginx-build.log
 venv/
+app/__pycache__
