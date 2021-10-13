@@ -1,5 +1,7 @@
 # Cthulhu Streaming Proxy
 
+![Cthulhu](cthulhu.png)
+
 ## About
 
 **Why?**
@@ -42,3 +44,4 @@ out the cloud infrastructure needs.
 
 9/17/21 - Added logging and cleaned up repeating code in nginxMainlineLatest.py with addition of sublogger.py module.  When run STDOUT logs to nginx-build.log.
 
+10/13/21 - Nginx with RTMP module build script completed and tested.  If you are on a Debian based distro just clone the repo, navigate to the Server/ subfolder and run "./buildDeps.py && ./nginxMainlineLatest.py".  That will churn out a build of Nginx ready to proxy RTMP!  Starting work on the web front end today.
