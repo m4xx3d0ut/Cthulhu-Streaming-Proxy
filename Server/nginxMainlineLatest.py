@@ -41,8 +41,9 @@ nginx_ln = 'sudo ln -s /usr/local/nginx/sbin/nginx /usr/local/sbin/'
 conf_dir = '/usr/local/nginx/conf/conf.d/'
 make_confd = 'sudo mkdir %s' % (conf_dir)
 cp_confd = 'sudo cp rtmp.conf %s' % (conf_dir)
+nginx_conf = '/usr/local/nginx/conf/nginx.conf'
 conf_incl = 'include /usr/local/nginx/conf/conf.d/*.conf;'
-conf_sed = "sudo sed -i '1 i\\%s'" % (conf_incl)
+conf_sed = "sudo sed -i '1 i\\%s' %s" % (conf_incl, nginx_conf)
 # Uninstall Nginx
 nginx_uninst = 'sudo rm -f -R %s && rm -f %s' % (nginx_path, nginx_sbin)
 
