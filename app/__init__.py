@@ -1,7 +1,7 @@
 # import redis
 import os
 from flask import Flask
-# from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 # from flask_login import LoginManager
 from flask_session.__init__ import Session
 # from werkzeug.utils import secure_filename
@@ -14,14 +14,14 @@ need it sooner or later.
 """
 
 
-# db = SQLAlchemy()
+db = SQLAlchemy()
 sess = Session()
 
 def create_app():
     app = Flask(__name__)
 
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
-    # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
     # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     # Flask session
@@ -29,7 +29,7 @@ def create_app():
     # app.config['SESSION_TYPE'] = os.environ.get('SESSION_TYPE')
     # app.config['SESSION_REDIS'] = redis.from_url(os.environ.get('SESSION_REDIS'))
 
-    # db.init_app(app)
+    db.init_app(app)
     sess.init_app(app)
 
     # login_manager = LoginManager()
@@ -42,9 +42,9 @@ def create_app():
     # def load_user(user_id):
     #     return User.query.get(int(user_id))
 
-    # # blueprint for auth routes in our app
-    # from .auth import auth as auth_blueprint
-    # app.register_blueprint(auth_blueprint)
+    # blueprint for auth routes in our app
+    from .auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint)
 
     # blueprint for non-auth parts of app
     from .main import main as main_blueprint
