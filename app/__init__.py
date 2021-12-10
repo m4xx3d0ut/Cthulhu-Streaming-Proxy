@@ -42,7 +42,7 @@ def create_app():
     # def load_user(user_id):
     #     return User.query.get(int(user_id))
 
-    # blueprint for auth routes in our app
+    # # blueprint for auth routes in our app
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
 
