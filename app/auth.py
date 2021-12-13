@@ -12,11 +12,39 @@ auth = Blueprint('auth', __name__)
 def login():
     return render_template('login.html')
 
+@auth.route('/login', methods=['POST'])
+def login_post():
+    email = request.form.get('email')
+    password = request.form.get('password')
+    otp = int(request.form.get("otp"))
+    remember = True if request.form.get('remember') else False
+
+    user = User.query.filter_by(email=email).first()
+
+    # Check username and password against database
+    if not user or not check_password_hash(user.password, password):
+        flash('Please check your login details and try again.')
+        return redirect(url_for('auth.login'))
+
+        # verifying submitted OTP with PyOTP
+    if pyotp.TOTP(user.secret).verify(otp):
+        # inform users if OTP is valid
+        login_user(user, remember=remember)
+        print(current_user.name)
+        flash('Welcome %s!' % (current_user.name))
+        return render_template('stream.html')
+    else:
+        # inform users if OTP is invalid
+        flash("You have supplied an invalid 2FA token!", "danger")
+        return redirect(url_for("auth.login"))
+
 @auth.route('/admin')
+@login_required
 def admin():
     return render_template('admin.html')
 
 @auth.route('/admin', methods=['POST'])
+@login_required
 def admin_post():
     email = request.form.get('email')
     name = request.form.get('name')
@@ -50,5 +78,7 @@ def admin_post():
     return redirect(url_for('auth.login'))
 
 @auth.route('/logout')
+@login_required
 def logout():
-    return render_template('logout.html')
+    logout_user()
+    return redirect(url_for('main.index'))
