@@ -15,4 +15,4 @@ def index():
 
 @main.route('/stream')
 def stream():
-    return 'Stream'
+    return render_template('stream.html')
