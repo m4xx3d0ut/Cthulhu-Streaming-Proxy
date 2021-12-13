@@ -1,4 +1,4 @@
-# import redis
+import redis
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -22,12 +22,12 @@ def create_app():
 
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-    # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     # Flask session
     app.config['SESSION_COOKIE_NAME'] = 'session_cookie'
-    # app.config['SESSION_TYPE'] = os.environ.get('SESSION_TYPE')
-    # app.config['SESSION_REDIS'] = redis.from_url(os.environ.get('SESSION_REDIS'))
+    app.config['SESSION_TYPE'] = os.environ.get('SESSION_TYPE')
+    app.config['SESSION_REDIS'] = redis.from_url(os.environ.get('SESSION_REDIS'))
 
     db.init_app(app)
     sess.init_app(app)
