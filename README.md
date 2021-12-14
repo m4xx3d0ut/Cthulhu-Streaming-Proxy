@@ -33,6 +33,19 @@ cloud provider of choice.
 	* https://www.srtalliance.org/
 	* Ability to transmit and ingest SRT streams
 
+### Installing
+
+NOTE: This is still under development and little to no functionality is available from the front end at this point.  If you want to use the Nginx build script to manually configure your own RTMP proxy see the 9/15/21 status below.
+
+$ sudo apt update && sudo apt -y upgrade && sudo apt -y install git python3 python3-pip redis-server
+$ git clone https://github.com/m4xx3d0ut/Cthulhu-Streaming-Proxy.git 
+$ PATH=$PATH:/home/ubuntu/.local/bin 
+$ cd Cthulhu-Streaming-Proxy/ 
+$ pip install -r requirements.txt 
+$ export SESSION_TYPE=redis 
+$ export SESSION_REDIS=redis://127.0.0.1:6379 
+$ sh test_uwsgi.sh 
+
 ### Project Status
 
 **Curent Status**
@@ -40,7 +53,7 @@ cloud provider of choice.
 I'll update this section with usefull information as we go.  I'm currently doing some research and hashing
 out the cloud infrastructure needs.
 
-9/15/2021 - Completed initial testing on the Nginx source build installer.  On a Debian based system it will dowload the latest version of Nginx and RTMP module, build it from source, and do some cleanup.  It creates a conf.d directory in /usr/local/nginx/conf/ and copies a basic rtmp.conf to it, making it useable as an RTMP proxy by manually editing the push lines.  Next I will be working on the code to configure Nginx as a RTMP proxy and start it as a service.
+9/15/21 - Completed initial testing on the Nginx source build installer.  On a Debian based system it will dowload the latest version of Nginx and RTMP module, build it from source, and do some cleanup.  It creates a conf.d directory in /usr/local/nginx/conf/ and copies a basic rtmp.conf to it, making it useable as an RTMP proxy by manually editing the push lines.  Next I will be working on the code to configure Nginx as a RTMP proxy and start it as a service.
 
 9/17/21 - Added logging and cleaned up repeating code in nginxMainlineLatest.py with addition of sublogger.py module.  When run STDOUT logs to nginx-build.log.
 

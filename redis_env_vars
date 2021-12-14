@@ -1,0 +1,2 @@
+export SESSION_TYPE=redis
+export SESSION_REDIS=redis://127.0.0.1:6379
