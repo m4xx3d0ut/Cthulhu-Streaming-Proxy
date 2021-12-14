@@ -37,14 +37,14 @@ cloud provider of choice.
 
 NOTE: This is still under development and little to no functionality is available from the front end at this point.  If you want to use the Nginx build script to manually configure your own RTMP proxy see the 9/15/21 status below.
 
-$ sudo apt update && sudo apt -y upgrade && sudo apt -y install git python3 python3-pip redis-server
-$ git clone https://github.com/m4xx3d0ut/Cthulhu-Streaming-Proxy.git 
-$ PATH=$PATH:/home/ubuntu/.local/bin 
-$ cd Cthulhu-Streaming-Proxy/ 
-$ pip install -r requirements.txt 
-$ export SESSION_TYPE=redis 
-$ export SESSION_REDIS=redis://127.0.0.1:6379 
-$ sh test_uwsgi.sh 
+$ sudo apt update && sudo apt -y upgrade && sudo apt -y install git python3 python3-pip redis-server __
+$ git clone https://github.com/m4xx3d0ut/Cthulhu-Streaming-Proxy.git __
+$ PATH=$PATH:/home/ubuntu/.local/bin __
+$ cd Cthulhu-Streaming-Proxy/ __
+$ pip install -r requirements.txt __
+$ export SESSION_TYPE=redis __
+$ export SESSION_REDIS=redis://127.0.0.1:6379 __
+$ sh test_uwsgi.sh __
 
 ### Project Status
 
