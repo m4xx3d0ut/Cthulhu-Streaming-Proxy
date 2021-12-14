@@ -35,6 +35,8 @@ cloud provider of choice.
 
 ### Installing
 
+I've been developing this on Debian and testing on an AWS t2.micro Ubuntu x86 instance.  It should work just fine on any Debian based system.
+
 NOTE: This is still under development and little to no functionality is available from the front end at this point.  If you want to use the Nginx build script to manually configure your own RTMP proxy see the 9/15/21 status below.
 
 $ sudo apt update && sudo apt -y upgrade && sudo apt -y install git python3 python3-pip redis-server
