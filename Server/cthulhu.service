@@ -3,6 +3,8 @@ Description=Cthulhu uWSGI instance
 After=network.target
 
 [Service]
+Environment="SESSION_TYPE=redis"
+Environment="SESSION_REDIS=redis://127.0.0.1:6379"
 User=ubuntu
 Group=www-data
 WorkingDirectory=/home/ubuntu/Cthulhu-Streaming-Proxy
