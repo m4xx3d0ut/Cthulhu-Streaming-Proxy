@@ -21,18 +21,21 @@ def login_post():
 
     user = User.query.filter_by(email=email).first()
 
+    is_admin = False
+
     # Check username and password against database
     if not user or not check_password_hash(user.password, password):
         flash('Please check your login details and try again.')
         return redirect(url_for('auth.login'))
 
-        # verifying submitted OTP with PyOTP
+    # verifying submitted OTP with PyOTP
     if pyotp.TOTP(user.secret).verify(otp):
         # inform users if OTP is valid
         login_user(user, remember=remember)
-        print(current_user.name)
         flash('Welcome %s!' % (current_user.name))
-        return render_template('stream.html')
+        if current_user.permissions == 'admin':
+            is_admin = True
+        return render_template('stream.html', is_admin=is_admin)
     else:
         # inform users if OTP is invalid
         flash("You have supplied an invalid 2FA token!", "danger")
@@ -41,7 +44,15 @@ def login_post():
 @auth.route('/admin')
 @login_required
 def admin():
-    return render_template('admin.html')
+
+    is_admin = False
+
+    if current_user.is_authenticated:
+        permissions = current_user.permissions
+        if permissions == 'admin':
+            is_admin = True
+
+    return render_template('admin.html', is_admin=is_admin)
 
 @auth.route('/admin', methods=['POST'])
 @login_required

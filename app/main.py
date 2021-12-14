@@ -11,9 +11,24 @@ main = Blueprint('main', __name__)
 @main.route('/', methods=['GET', 'POST'])
 def index():
 
-    return render_template('index.html')
+    is_admin = False
+
+    if current_user.is_authenticated:
+        permissions = current_user.permissions
+        if permissions == 'admin':
+            is_admin = True
+
+    return render_template('index.html', is_admin=is_admin)
 
 @main.route('/stream')
 @login_required
 def stream():
-    return render_template('stream.html')
+
+    is_admin = False
+
+    if current_user.is_authenticated:
+        permissions = current_user.permissions
+        if permissions == 'admin':
+            is_admin = True
+
+    return render_template('stream.html', is_admin=is_admin)
