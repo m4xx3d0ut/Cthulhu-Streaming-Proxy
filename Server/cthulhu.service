@@ -6,8 +6,7 @@ After=network.target
 User=ubuntu
 Group=www-data
 WorkingDirectory=/home/ubuntu/Cthulhu-Streaming-Proxy
-#Environment=
-ExecStart=uwsgi --ini cthulhu.ini
+ExecStart=/home/ubuntu/.local/bin/uwsgi --ini cthulhu.ini
 
 [Install]
 WantedBy=multi-user.target
