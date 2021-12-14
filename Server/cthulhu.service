@@ -1,0 +1,13 @@
+[Unit]
+Description=Cthulhu uWSGI instance
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/Cthulhu-Streaming-Proxy
+#Environment=
+ExecStart=uwsgi --ini cthulhu.ini
+
+[Install]
+WantedBy=multi-user.target
