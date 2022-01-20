@@ -39,19 +39,28 @@ I've been developing this on Debian and testing on an AWS t2.micro Ubuntu x86 in
 
 NOTE: This is still under development and little to no functionality is available from the front end at this point.  If you want to use the Nginx build script to manually configure your own RTMP proxy see the 9/15/21 status below.
 
+##### Flask UI setup
+###### (Does not include Nginx proxy setup)
+
 $ sudo apt update && sudo apt -y upgrade && sudo apt -y install git python3 python3-pip redis-server
 
 $ git clone https://github.com/m4xx3d0ut/Cthulhu-Streaming-Proxy.git 
 
-$ PATH=$PATH:/home/ubuntu/.local/bin 
+$ PATH="$PATH:/home/$USER/.local/bin" 
 
 $ cd Cthulhu-Streaming-Proxy/ 
+
+$ python3 -m venv venv 
+
+$ source venv/bin/activate 
 
 $ pip install -r requirements.txt 
 
 $ export SESSION_TYPE=redis 
 
 $ export SESSION_REDIS=redis://127.0.0.1:6379 
+
+$ sudo ps aux | grep 6379 # Make sure redis is running on 6379
 
 $ sh test_uwsgi.sh 
 
