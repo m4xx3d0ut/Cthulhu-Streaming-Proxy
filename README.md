@@ -24,7 +24,7 @@ cloud provider of choice.
 	* Stream preview monitors
 	* Ability to record streams to cloud location
 	* Ability to schedule prerecorded content to stream automatically with email based notifications
-	* Several usefull test funcions and performance monitors will live here
+	* Several useful test functions and performance monitors will live here
 3. RTMP support
 	* Ability to transmit and ingest RTMP
 	* Ability to push to multiple channels and platforms
@@ -66,16 +66,16 @@ $ sh test_uwsgi.sh
 
 ### Project Status
 
-**Curent Status**
+**Current Status**
 
-I'll update this section with usefull information as we go.  I'm currently doing some research and hashing
+I'll update this section with useful information as we go.  I'm currently doing some research and hashing
 out the cloud infrastructure needs.
 
-9/15/21 - Completed initial testing on the Nginx source build installer.  On a Debian based system it will dowload the latest version of Nginx and RTMP module, build it from source, and do some cleanup.  It creates a conf.d directory in /usr/local/nginx/conf/ and copies a basic rtmp.conf to it, making it useable as an RTMP proxy by manually editing the push lines.  Next I will be working on the code to configure Nginx as a RTMP proxy and start it as a service.
+9/15/21 - Completed initial testing on the Nginx source build installer.  On a Debian based system it will download the latest version of Nginx and RTMP module, build it from source, and do some cleanup.  It creates a conf.d directory in /usr/local/nginx/conf/ and copies a basic rtmp.conf to it, making it usable as an RTMP proxy by manually editing the push lines.  Next I will be working on the code to configure Nginx as a RTMP proxy and start it as a service.
 
 9/17/21 - Added logging and cleaned up repeating code in nginxMainlineLatest.py with addition of sublogger.py module.  When run STDOUT logs to nginx-build.log.
 
-10/13/21 - Nginx with RTMP module build script completed and tested.  If you are on a Debian based distro just clone the repo, navigate to the Server/ subfolder and run "./buildDeps.py && ./nginxMainlineLatest.py".  That will churn out a build of Nginx ready to proxy RTMP!  Starting work on the web front end today.
+10/13/21 - Nginx with RTMP module build script completed and tested.  If you are on a Debian based distro just clone the repo, navigate to the Server/ sub folder and run "./buildDeps.py && ./nginxMainlineLatest.py".  That will churn out a build of Nginx ready to proxy RTMP!  Starting work on the web front end today.
 
 12/09/21 - I've finally found some time to start working on this project again.  I'm working on the web UI, authentication, and event control system.
 
