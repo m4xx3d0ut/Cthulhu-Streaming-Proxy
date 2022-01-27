@@ -5,3 +5,5 @@ nginx-build.log
 venv/
 app/__pycache__
 CthulhuUInotes.txt
+Cthulhu.sublime-project
+Cthulhu.sublime-workspace
